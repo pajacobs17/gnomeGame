@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Welcome</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body onload="init()" style="background-color: #009900;">
+
+	<div id="scoreBoard">
+		<span>Score: </span> <span id="score">0</span>
+	</div>
+
+	<!-- <canvas id="gameCanvas">
+	</canvas> -->
+
+	<!--SCRIPTS -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<script src="simpleGame.js"></script>
+
+	<script>
+		//Game vars
+        var game = new Scene();
+        var all = document.getElementsByTagName("canvas");
+        var canvas = all[0];
+        canvas.setAttribute("id", "gameCanvas");
+         var scoreboard = document.getElementById("scoreBoard");
+         scoreboard.style.width = "window.innerWidth";
+
+        //Sprites
+        var bGnome
+        var pGnome
+        var oGnome
+        var brandy
+
+        function gnome(src){
+          //generate random numbers to position gnome
+          var posH = randNum(canvas.clientHeight);
+          var posW = randNum(canvas.clientWidth);
+
+          //create gnome
+          //86 and 135 are the width and height of the gnome picture
+          var aGnome = new Sprite(game, src, 86, 135);
+          aGnome.setSpeed(0);
+          aGnome.setPosition(posW, posH);
+          // console.log(posW, posH, canvas.clientHeight, canvas.clientWidth);
+          return aGnome;
+        }
+
+         /* function should return one number that are within bounds of the canvas */
+        function randNum(num){
+          //setting max and min to make sure gnomes won't go beyond/touch border
+          var max = (num - 100);
+          var min = 200;
+          var rand = Math.floor(Math.random() * (max - min)) + min;
+          return rand;
+        }
+
+        function mower(){
+        var mower = new Sprite(game, "img/Brandy-Forward.png", 100, 225);
+        mower.setSpeed(0);
+        mower.setPosition(50, 115);
+
+        mower.checkKeys = function(){
+            //temporary function for testing
+            if (keysDown[K_UP]){
+                this.changeYby(-5);
+                 this.setImage("img/Brandy-Back.png")
+            }
+            
+            if (keysDown[K_DOWN]){
+                this.changeYby(5);
+                 this.setImage("img/Brandy-Forward.png")
+            }
+            
+            if (keysDown[K_LEFT]){
+               this.setImage("img/Brandy-Left.png")
+                this.changeXby(-5);
+            }
+            
+            if (keysDown[K_RIGHT]){
+                this.setImage("img/Brandy-Right.png")
+                this.changeXby(5);
+            }
+        } // end checkKeys
+
+
+        return mower;
+        }
+
+        function init(){
+            bGnome = new gnome("img/blueGnome.png");
+            pGnome = new gnome("img/purpleGnome.png");
+            oGnome = new gnome("img/orangeGnome.png");
+            brandy = new mower();
+
+            game.start();
+        }
+        
+        function update(){
+            game.clear();
+            bGnome.update();
+            pGnome.update();
+            oGnome.update();
+
+            brandy.checkKeys();
+            brandy.update();
+            checkCollisions();
+        }
+
+        /*
+          check whether or not the player has colllided with a gnome
+          if the player has collided with a gnome, end the game with an alert and beyond
+          refreshing the page
+        */
+        function checkCollisions(){
+          //if a collision has occured
+            if (brandy.collidesWith(bGnome || pGnome || oGnome)){
+                alert("You have failed in the ultimte quest to mow your lawn. Good luck next time.")
+                game.stop();
+                document.location.href = "";
+            }
+        } 
+	</script>
+</body>
+
+</html>
