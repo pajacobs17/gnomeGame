@@ -29,7 +29,7 @@ function Sprite(scene, imageFile, width, height){
   this.cWidth = parseInt(this.canvas.width);
   this.x = 200;
   this.y = 200;
-  this.dx = 10;
+  this.dx = 0;
   this.dy = 0;
   this.imgAngle = 0;
   this.moveAngle = 0;
@@ -928,7 +928,7 @@ function Animation(spriteSheet, imgWidth, imgHeight, cellWidth, cellHeight){
   this.setup = function(){
     this.timer.start();
     this.framesPerRow = this.imgWidth / this.cellWidth;
-    this.framesPerColumn = this.imgHeight / this.cellHeight;
+    this.framesPerColumn = this.imgd / this.cellHeight;
   }
   
   this.addCycle = function(cycleName, startingCell, frames){

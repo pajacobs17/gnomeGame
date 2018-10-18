@@ -19,6 +19,7 @@
 	<script>
 		//Game vars
         var game = new Scene();
+		game.setSize(500, 500);
         var all = document.getElementsByTagName("canvas");
         var canvas = all[0];
 		var board = new Array();
@@ -131,17 +132,6 @@
                 document.location.href = "";
             }
         }
-
-		function createBoard() {
-			for(var i = 0; i < canvas.clientHeight; i += 100) {
-				var array = new Array();
-				board.push(array);
-				
-				for(var j = 0; j < canvas.clientWidth; j += 100) {
-					board[0][0] = true;
-				}
-			}
-		}
 		
 		function createInitialBoard() {
 			var count = 0;
