@@ -12,6 +12,12 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="simpleGame.js"></script>
+	
+	<!--Class files -->
+	<script src="Mower.js"></script>
+	<script src="Gnome.js"></script>
+	<script src="Grass.js"></script>
+	
 </head>
 
 <body onload="init()" style="background-color: #009900;">
@@ -23,26 +29,11 @@
         var all = document.getElementsByTagName("canvas");
         var canvas = all[0];
 		var board = new Array();
-		var mowed = new Array();
 		
 		
         //Sprites
         var gnomeList = [];
         var brandy
-
-        function Gnome(src){
-          //generate random numbers to position Gnome
-          var posH = randNum(canvas.clientHeight);
-          var posW = randNum(canvas.clientWidth);
-
-          //create Gnome
-          //86 and 135 are the width and height of the Gnome picture
-          var aGnome = new Sprite(game, src, 86, 135);
-          aGnome.setSpeed(0);
-          aGnome.setPosition(posW, posH);
-
-          return aGnome;
-        }
 
          /* function should return one number that are within bounds of the canvas */
         function randNum(num){
@@ -51,38 +42,6 @@
           var min = 200;
           var rand = Math.floor(Math.random() * (max - min)) + min;
           return rand;
-        }
-
-        function Mower(){
-        var Mower = new Sprite(game, "img/Brandy-Forward.png", 100, 225);
-        Mower.setSpeed(0);
-        Mower.setPosition(50, 115);
-
-        Mower.checkKeys = function(){
-            //temporary function for testing
-            if (keysDown[K_UP]){
-                this.changeYby(-5);
-                 this.setImage("img/Brandy-Back.png")
-            }
-            
-            if (keysDown[K_DOWN]){
-                this.changeYby(5);
-                 this.setImage("img/Brandy-Forward.png")
-            }
-            
-            if (keysDown[K_LEFT]){
-               this.setImage("img/Brandy-Left.png")
-                this.changeXby(-5);
-            }
-            
-            if (keysDown[K_RIGHT]){
-                this.setImage("img/Brandy-Right.png")
-                this.changeXby(5);
-            }
-        } // end checkKeys
-
-
-        return Mower;
         }
 
         function init(){
@@ -136,20 +95,27 @@
                 document.location.href = "";
             }
         }
+		/*
+		function grassMowed() {
+			for(var i = 0; i < board.length; i++) {
+				for(var j = 0; j < board[i].length; j++) {
+					if(brandy.collidesWith(board[i][j])) {
+						board[i][j].visible = false;
+					}
+				}
+			}
+		}*/
 		
 		function drawBoard() {
 			var rowIndex = 0;
 			var columnIndex = 0;
 			for(var i = 50; i <= canvas.clientHeight; i += 100) {
 				board[columnIndex] = new Array();
-				mowed[columnIndex] = new Array();
 				for(var j = 50; j <= canvas.clientWidth; j += 100) {
 					board[columnIndex][rowIndex] = new Sprite(game, "img/grass.jpg", 100, 100);
-					mowed[columnIndex][rowIndex] = true;
 					board[columnIndex][rowIndex].setPosition(i, j);
 					board[columnIndex][rowIndex].update();
-					rowIndex++;
-					
+					rowIndex++;	
 				}
 			columnIndex++;
 			}
