@@ -465,12 +465,12 @@ function Scene(){
     
     //dynamically create a canvas element
     this.canvas = document.createElement("canvas");
+    this.canvas.style.backgroundColor = "yellow";
     document.body.appendChild(this.canvas);
     this.context = this.canvas.getContext("2d");
     
     this.clear = function(){
-      this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-      console.log(this);
+      this.context.clearRect(0, 0, this.width, this.height);
     }
 
     this.start = function(){
@@ -585,12 +585,9 @@ function Scene(){
       this.canvas.style.display = "block";
     }
     
-     //Custom syles
-    // this.setSize(1024, 500);
-    this.setBG("#18701E");
-    this.canvas.style.position = "absolute";
-    this.canvas.width  = .75 * window.innerWidth;
-    this.canvas.height = .7 * window.innerHeight;
+    this.setSize(800, 600);
+    this.setPos(10, 10);
+    this.setBG("lightgray");
     
 } // end Scene class def
 

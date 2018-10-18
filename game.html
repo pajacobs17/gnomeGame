@@ -21,7 +21,9 @@
         var game = new Scene();
         var all = document.getElementsByTagName("canvas");
         var canvas = all[0];
-
+		var board = new Array();
+		
+		
         //Sprites
         var gnomeList = [];
         var brandy
@@ -36,7 +38,7 @@
           var aGnome = new Sprite(game, src, 86, 135);
           aGnome.setSpeed(0);
           aGnome.setPosition(posW, posH);
-          // console.log(posW, posH, canvas.clientHeight, canvas.clientWidth);
+
           return aGnome;
         }
 
@@ -88,13 +90,16 @@
 
             gnomeList.push(new gnome("img/blueGnome.png"));
             gnomeList.push(new gnome("img/purpleGnome.png"));
-
-            game.start();
+			
+			createInitialBoard();
+			
+            //game.start();
         }
         
         function update(){
             game.clear();
-
+			
+			
             //for each frame:
               //set speed to 5, 
               //give the gnome a new random direction, 
@@ -110,6 +115,7 @@
             //check the keypress for player and redraw player
             brandy.checkKeys();
             brandy.update();
+			
         }
 
         /*
@@ -124,7 +130,30 @@
                 game.stop();
                 document.location.href = "";
             }
-        } 
+        }
+
+		function createBoard() {
+			for(var i = 0; i < canvas.clientHeight; i += 100) {
+				var array = new Array();
+				board.push(array);
+				
+				for(var j = 0; j < canvas.clientWidth; j += 100) {
+					board[0][0] = true;
+				}
+			}
+		}
+		
+		function createInitialBoard() {
+			var count = 0;
+			for(var i = 50; i <= canvas.clientHeight; i += 100) {
+				for(var j = 50; j <= canvas.clientWidth; j += 100) {
+					board.push(new Sprite(game, "img/grass.jpg", 100, 100));
+					board[count].setPosition(i, j);
+					board[count].update();
+					count++;
+				}
+			}
+		}
 	</script>
 </body>
 
