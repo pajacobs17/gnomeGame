@@ -23,19 +23,20 @@
         var all = document.getElementsByTagName("canvas");
         var canvas = all[0];
 		var board = new Array();
+		var mowed = new Array();
 		
 		
         //Sprites
         var gnomeList = [];
         var brandy
 
-        function gnome(src){
-          //generate random numbers to position gnome
+        function Gnome(src){
+          //generate random numbers to position Gnome
           var posH = randNum(canvas.clientHeight);
           var posW = randNum(canvas.clientWidth);
 
-          //create gnome
-          //86 and 135 are the width and height of the gnome picture
+          //create Gnome
+          //86 and 135 are the width and height of the Gnome picture
           var aGnome = new Sprite(game, src, 86, 135);
           aGnome.setSpeed(0);
           aGnome.setPosition(posW, posH);
@@ -45,19 +46,19 @@
 
          /* function should return one number that are within bounds of the canvas */
         function randNum(num){
-          //setting max and min to make sure gnomes won't go beyond/touch border
+          //setting max and min to make sure Gnomes won't go beyond/touch border
           var max = (num - 100);
           var min = 200;
           var rand = Math.floor(Math.random() * (max - min)) + min;
           return rand;
         }
 
-        function mower(){
-        var mower = new Sprite(game, "img/Brandy-Forward.png", 100, 225);
-        mower.setSpeed(0);
-        mower.setPosition(50, 115);
+        function Mower(){
+        var Mower = new Sprite(game, "img/Brandy-Forward.png", 100, 225);
+        Mower.setSpeed(0);
+        Mower.setPosition(50, 115);
 
-        mower.checkKeys = function(){
+        Mower.checkKeys = function(){
             //temporary function for testing
             if (keysDown[K_UP]){
                 this.changeYby(-5);
@@ -81,18 +82,18 @@
         } // end checkKeys
 
 
-        return mower;
+        return Mower;
         }
 
         function init(){
 			 canvas.setAttribute("id", "gameCanvas");
 		 
-            brandy = new mower();
+            brandy = new Mower();
 
-            gnomeList.push(new gnome("img/blueGnome.png"));
-            gnomeList.push(new gnome("img/purpleGnome.png"));
+            gnomeList.push(new Gnome("img/blueGnome.png"));
+            gnomeList.push(new Gnome("img/purpleGnome.png"));
 			
-			createInitialBoard();
+			drawBoard();
 			
             //game.start();
         }
@@ -100,31 +101,34 @@
         function update(){
             game.clear();
 			
+			drawBoard();
 			
             //for each frame:
               //set speed to 5, 
-              //give the gnome a new random direction, 
-              //redraw the gnome, and 
+              //give the Gnome a new random direction, 
+              //redraw the Gnome, and 
               //check for collision
             for(i = 0; i < gnomeList.length; i++) {
               gnomeList[i].setSpeed(5);
               newDir = (Math.random() * 90 -45);
               gnomeList[i].changeMoveAngleBy(newDir);
               gnomeList[i].update();
-              checkCollisions(gnomeList[i]);
+              checkLost(gnomeList[i]);
             }
+			
+			grassMoved();
+			
             //check the keypress for player and redraw player
             brandy.checkKeys();
             brandy.update();
-			
         }
 
         /*
-          check whether or not the player has colllided with a gnome
-          if the player has collided with a gnome, end the game with an alert and beyond
+          check whether or not the player has colllided with a Gnome
+          if the player has collided with a Gnome, end the game with an alert and beyond
           refreshing the page
         */
-        function checkCollisions(gnome){
+        function checkLoss(gnome){
           //if a collision has occured, end the game
             if (brandy.collidesWith(gnome)){
                 alert("You have failed in the ultimte quest to mow your lawn. Good luck next time.")
@@ -133,16 +137,26 @@
             }
         }
 		
-		function createInitialBoard() {
-			var count = 0;
+		function drawBoard() {
+			var rowIndex = 0;
+			var columnIndex = 0;
 			for(var i = 50; i <= canvas.clientHeight; i += 100) {
+				board[columnIndex] = new Array();
+				mowed[columnIndex] = new Array();
 				for(var j = 50; j <= canvas.clientWidth; j += 100) {
-					board.push(new Sprite(game, "img/grass.jpg", 100, 100));
-					board[count].setPosition(i, j);
-					board[count].update();
-					count++;
+					board[columnIndex][rowIndex] = new Sprite(game, "img/grass.jpg", 100, 100);
+					mowed[columnIndex][rowIndex] = true;
+					board[columnIndex][rowIndex].setPosition(i, j);
+					board[columnIndex][rowIndex].update();
+					rowIndex++;
+					
 				}
+			columnIndex++;
 			}
+		}
+		
+		function grassMowed() {
+			
 		}
 	</script>
 </body>
