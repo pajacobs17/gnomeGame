@@ -7,35 +7,23 @@
 	<title>Welcome</title>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link href="style.css" rel="stylesheet" type="text/css" />
-</head>
-
-<body onload="init()" style="background-color: #009900;">
-
-	<div id="scoreBoard">
-		<span>Score: </span> <span id="score">0</span>
-	</div>
-
-	<!-- <canvas id="gameCanvas">
-	</canvas> -->
-
+	
 	<!--SCRIPTS -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="simpleGame.js"></script>
+</head>
+
+<body onload="init()" style="background-color: #009900;">
 
 	<script>
 		//Game vars
         var game = new Scene();
         var all = document.getElementsByTagName("canvas");
         var canvas = all[0];
-        canvas.setAttribute("id", "gameCanvas");
-         var scoreboard = document.getElementById("scoreBoard");
-         scoreboard.style.width = "window.innerWidth";
 
         //Sprites
-        var bGnome
-        var pGnome
-        var oGnome
+        var gnomeList = [];
         var brandy
 
         function gnome(src){
@@ -94,23 +82,34 @@
         }
 
         function init(){
-            bGnome = new gnome("img/blueGnome.png");
-            pGnome = new gnome("img/purpleGnome.png");
-            oGnome = new gnome("img/orangeGnome.png");
+			 canvas.setAttribute("id", "gameCanvas");
+		 
             brandy = new mower();
+
+            gnomeList.push(new gnome("img/blueGnome.png"));
+            gnomeList.push(new gnome("img/purpleGnome.png"));
 
             game.start();
         }
         
         function update(){
             game.clear();
-            bGnome.update();
-            pGnome.update();
-            oGnome.update();
 
+            //for each frame:
+              //set speed to 5, 
+              //give the gnome a new random direction, 
+              //redraw the gnome, and 
+              //check for collision
+            for(i = 0; i < gnomeList.length; i++) {
+              gnomeList[i].setSpeed(5);
+              newDir = (Math.random() * 90 -45);
+              gnomeList[i].changeMoveAngleBy(newDir);
+              gnomeList[i].update();
+              checkCollisions(gnomeList[i]);
+            }
+            //check the keypress for player and redraw player
             brandy.checkKeys();
             brandy.update();
-            checkCollisions();
         }
 
         /*
@@ -118,9 +117,9 @@
           if the player has collided with a gnome, end the game with an alert and beyond
           refreshing the page
         */
-        function checkCollisions(){
-          //if a collision has occured
-            if (brandy.collidesWith(bGnome || pGnome || oGnome)){
+        function checkCollisions(gnome){
+          //if a collision has occured, end the game
+            if (brandy.collidesWith(gnome)){
                 alert("You have failed in the ultimte quest to mow your lawn. Good luck next time.")
                 game.stop();
                 document.location.href = "";
