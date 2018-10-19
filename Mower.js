@@ -1,6 +1,6 @@
-function Mower(){
+function Mower(src){
 	
-	var Mower = new Sprite(game, "img/Brandy-Forward.png", 100, 225);
+	var Mower = new Sprite(game, src, 20, 112);
 	Mower.setSpeed(0);
 	Mower.setPosition(50, 115);
 

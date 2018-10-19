@@ -47,20 +47,20 @@
         function init(){
 			 canvas.setAttribute("id", "gameCanvas");
 		 
-            brandy = new Mower();
+            brandy = new Mower("img/Brandy-Forward.png");
 
             gnomeList.push(new Gnome("img/blueGnome.png"));
             gnomeList.push(new Gnome("img/purpleGnome.png"));
 			
-			drawBoard();
+			createBoard();
 			
-            //game.start();
+            game.start();
         }
         
         function update(){
             game.clear();
 			
-			drawBoard();
+			displayBoard();
 			
             //for each frame:
               //set speed to 5, 
@@ -72,10 +72,10 @@
               newDir = (Math.random() * 90 -45);
               gnomeList[i].changeMoveAngleBy(newDir);
               gnomeList[i].update();
-              checkLost(gnomeList[i]);
+              checkLoss(gnomeList[i]);
             }
 			
-			grassMoved();
+			//grassMowed();
 			
             //check the keypress for player and redraw player
             brandy.checkKeys();
@@ -90,23 +90,23 @@
         function checkLoss(gnome){
           //if a collision has occured, end the game
             if (brandy.collidesWith(gnome)){
-                alert("You have failed in the ultimte quest to mow your lawn. Good luck next time.")
+               // alert("You have failed in the ultimte quest to mow your lawn. Good luck next time.")
                 game.stop();
-                document.location.href = "";
+               // document.location.href = "";
             }
         }
-		/*
-		function grassMowed() {
+		
+		
+		function displayBoard() {
 			for(var i = 0; i < board.length; i++) {
 				for(var j = 0; j < board[i].length; j++) {
-					if(brandy.collidesWith(board[i][j])) {
-						board[i][j].visible = false;
-					}
+					checkMowed(board[i][j]);
+					board[i][j].update();
 				}
 			}
-		}*/
+		}
 		
-		function drawBoard() {
+		function createBoard() {
 			var rowIndex = 0;
 			var columnIndex = 0;
 			for(var i = 50; i <= canvas.clientHeight; i += 100) {
@@ -114,16 +114,20 @@
 				for(var j = 50; j <= canvas.clientWidth; j += 100) {
 					board[columnIndex][rowIndex] = new Sprite(game, "img/grass.jpg", 100, 100);
 					board[columnIndex][rowIndex].setPosition(i, j);
-					board[columnIndex][rowIndex].update();
 					rowIndex++;	
 				}
+			rowIndex = 0;
 			columnIndex++;
 			}
 		}
 		
-		function grassMowed() {
-			
+		function checkMowed(grass) {
+			if(brandy.collidesWith(grass)) {
+				grass.hide();
+			}
 		}
+
+		
 	</script>
 </body>
 
