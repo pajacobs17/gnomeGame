@@ -25,14 +25,18 @@
 	<script>
 		//Game vars
         var game = new Scene();
+		game.setBG("green");
 		game.setSize(500, 500);
+		//get the canvas elements for the game to allow for dynamic resizing
         var all = document.getElementsByTagName("canvas");
         var canvas = all[0];
+		//contains all the grass sprite objects
 		var board = new Array();
 		
 		
-        //Sprites
+        //list of the gnomes
         var gnomeList = [];
+		//the brandy mower sprite
         var brandy
 
          /* function should return one number that are within bounds of the canvas */
@@ -51,6 +55,8 @@
 
             gnomeList.push(new Gnome("img/blueGnome.png"));
             gnomeList.push(new Gnome("img/purpleGnome.png"));
+			gnomeList.push(new Gnome("img/purpleGnome.png"));
+			gnomeList.push(new Gnome("img/orangeGnome.png"));
 			
 			createBoard();
 			
@@ -75,11 +81,14 @@
               checkLoss(gnomeList[i]);
             }
 			
-			//grassMowed();
-			
             //check the keypress for player and redraw player
             brandy.checkKeys();
             brandy.update();
+			
+			if(checkWin() == true) {
+				alert("Congrats. You won!");
+				game.stop();
+			}
         }
 
         /*
@@ -90,13 +99,22 @@
         function checkLoss(gnome){
           //if a collision has occured, end the game
             if (brandy.collidesWith(gnome)){
-               // alert("You have failed in the ultimte quest to mow your lawn. Good luck next time.")
+                alert("You have failed in the ultimte quest to mow your lawn. Good luck next time.");
                 game.stop();
-               // document.location.href = "";
             }
         }
 		
-		
+		function checkWin() {
+			for(var i = 0; i < board.length; i++) {
+				for(var j = 0; j < board[i].length; j++) {
+					if(board[i][j].visible == true) {
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+			
 		function displayBoard() {
 			for(var i = 0; i < board.length; i++) {
 				for(var j = 0; j < board[i].length; j++) {
@@ -109,10 +127,10 @@
 		function createBoard() {
 			var rowIndex = 0;
 			var columnIndex = 0;
-			for(var i = 50; i <= canvas.clientHeight; i += 100) {
+			for(var i = 25; i <= canvas.clientHeight; i += 50) {
 				board[columnIndex] = new Array();
-				for(var j = 50; j <= canvas.clientWidth; j += 100) {
-					board[columnIndex][rowIndex] = new Sprite(game, "img/grass.jpg", 100, 100);
+				for(var j = 25; j <= canvas.clientWidth; j += 50) {
+					board[columnIndex][rowIndex] = new Sprite(game, "img/grass.jpg", 50, 50);
 					board[columnIndex][rowIndex].setPosition(i, j);
 					rowIndex++;	
 				}

@@ -6,7 +6,7 @@ function Gnome(src){
 
   //create Gnome
   //86 and 135 are the width and height of the Gnome picture
-  var aGnome = new Sprite(game, src, 86, 135);
+  var aGnome = new Sprite(game, src, 40, 80);
   aGnome.setSpeed(0);
   aGnome.setPosition(posW, posH);
 

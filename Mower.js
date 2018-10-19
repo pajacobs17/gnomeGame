@@ -2,7 +2,7 @@ function Mower(src){
 	
 	var Mower = new Sprite(game, src, 20, 112);
 	Mower.setSpeed(0);
-	Mower.setPosition(50, 115);
+	Mower.setPosition(0, 0);
 
 	Mower.checkKeys = function(){
 		//temporary function for testing
