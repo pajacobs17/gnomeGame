@@ -25,8 +25,8 @@
 	<script>
 		//Game vars
         var game = new Scene();
-		game.setBG("green");
 		game.setSize(500, 500);
+		game.setBG("green");
 		//get the canvas elements for the game to allow for dynamic resizing
         var all = document.getElementsByTagName("canvas");
         var canvas = all[0];
@@ -48,6 +48,8 @@
           return rand;
         }
 
+		//initializes various elements, including the mower and gnome sprites
+		//creates the initial board of grass sprites, starts the game
         function init(){
 			 canvas.setAttribute("id", "gameCanvas");
 		 
@@ -62,7 +64,8 @@
 			
             game.start();
         }
-        
+		
+        //is called for ever "frame", clears the frame then displays the current state
         function update(){
             game.clear();
 			
@@ -85,6 +88,7 @@
             brandy.checkKeys();
             brandy.update();
 			
+			//end the game if the checkwin function returns true
 			if(checkWin() == true) {
 				alert("Congrats. You won!");
 				game.stop();
@@ -104,6 +108,9 @@
             }
         }
 		
+		// go through every grass sprite in board. If any of the grass sprite are
+		//visible, then the game is not won yet and return false
+		//else return true
 		function checkWin() {
 			for(var i = 0; i < board.length; i++) {
 				for(var j = 0; j < board[i].length; j++) {
@@ -114,7 +121,10 @@
 			}
 			return true;
 		}
-			
+		
+		//display every grass sprite in the board object
+		//call checkMowed(sprite) on each sprite, then
+		//call .update() on each sprite to draw it
 		function displayBoard() {
 			for(var i = 0; i < board.length; i++) {
 				for(var j = 0; j < board[i].length; j++) {
@@ -124,21 +134,31 @@
 			}
 		}
 		
+		//create the board 2d array with all the grass elements inside it
 		function createBoard() {
+			//keep track of the current row and colummn, used to create the 2d array
 			var rowIndex = 0;
 			var columnIndex = 0;
+			//keeps track of the y, starts at 25 since the grass images are 50x50
+			//adds 50 so as to move to the center of where the next grass object should be
 			for(var i = 25; i <= canvas.clientHeight; i += 50) {
+				//adds the inner array at the current row column index
 				board[columnIndex] = new Array();
+				//adds the grass elements at the given column and row index, magic constants
+				//same as above for same reasons
 				for(var j = 25; j <= canvas.clientWidth; j += 50) {
 					board[columnIndex][rowIndex] = new Sprite(game, "img/grass.jpg", 50, 50);
 					board[columnIndex][rowIndex].setPosition(i, j);
 					rowIndex++;	
 				}
+			//reset row index for the next inner loop iteration
 			rowIndex = 0;
+			//increment the column index
 			columnIndex++;
 			}
 		}
 		
+		//if a grass has collided with the mower sprite, hide it
 		function checkMowed(grass) {
 			if(brandy.collidesWith(grass)) {
 				grass.hide();
